@@ -3,6 +3,7 @@ package ru.mertsalovda.messager
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -14,7 +15,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private val db = FirebaseDatabase.getInstance()
     private val myRef = db.getReference("message")
     private val store = FirebaseFirestore.getInstance()
+    private val storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +76,25 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(applicationContext, it.message, Toast.LENGTH_SHORT).show()
                         println(it.message)
                     }
+        }
+
+        val storageRef = storage
+                .getReferenceFromUrl("gs://messager-42fce.appspot.com")
+                .child("image.jpg")
+
+        try {
+            val file = File.createTempFile("image", "jpg")
+            storageRef.getFile(file)
+                    .addOnSuccessListener {
+                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                        imageView.setImageBitmap(bitmap)
+                    }
+                    .addOnFailureListener{
+                        Toast.makeText(applicationContext, it.message, Toast.LENGTH_SHORT).show()
+                        println(it.message)
+                    }
+        } catch (e: Exception){
+            println(e.message)
         }
     }
 
