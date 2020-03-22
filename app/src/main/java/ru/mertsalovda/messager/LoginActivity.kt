@@ -1,7 +1,6 @@
 package ru.mertsalovda.messager
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
@@ -17,11 +16,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.ac_login.*
 import java.io.File
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private val RC_SIGN_IN = 100
     private val db = FirebaseDatabase.getInstance()
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.ac_login)
 
         val providers: List<AuthUI.IdpConfig> = listOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
