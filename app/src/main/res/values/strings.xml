@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MessagerFirebase</string>
+    <string name="logout">logout</string>
+    <string name="delete_profile">delete profile</string>
 </resources>

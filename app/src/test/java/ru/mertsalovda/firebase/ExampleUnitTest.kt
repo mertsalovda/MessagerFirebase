@@ -1,4 +1,4 @@
-package ru.mertsalovda.messager
+package ru.mertsalovda.firebase
 
 import org.junit.Test
 

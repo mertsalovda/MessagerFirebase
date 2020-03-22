@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 /app/google-services.json
+/app/debug.jks
+/app/client_secret_1024969224487-g6mad1rchgl8ea2vc6usooaomo0u8dff.apps.googleusercontent.com.json
+/app/client_secret_545446495200-qoqe5v3ank3vhkk2ihgib0fof3fa1jr3.apps.googleusercontent.com.json

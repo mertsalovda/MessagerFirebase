@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "ru.mertsalovda.messager"
+        applicationId "ru.mertsalovda.firebase"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
@@ -17,11 +16,24 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+//    signingConfigs {
+//        debug {
+//            storeFile file('debug.jks')
+//            storePassword "123456"
+//            keyAlias "key0"
+//            keyPassword "654321"
+//            v2SigningEnabled false
+//        }
+//    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+//        debug {
+//            signingConfig signingConfigs.debug
+//        }
     }
 
 }
@@ -41,4 +53,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-firestore:21.4.1'
     implementation 'com.google.firebase:firebase-storage-ktx:19.1.1'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 }
+apply plugin: 'com.google.gms.google-services'
