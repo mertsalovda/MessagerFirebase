@@ -2,4 +2,7 @@
     <string name="app_name">MessagerFirebase</string>
     <string name="logout">logout</string>
     <string name="delete_profile">delete profile</string>
+    <string name="input_message">Введите сообщение</string>
+    <string name="profile">profile</string>
+    <string name="empty_message">Пустое сообщение!</string>
 </resources>
