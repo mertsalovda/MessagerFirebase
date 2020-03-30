@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
+import ru.mertsalovda.firebase.chat.ChatActivity
 
 class LoginActivity : AppCompatActivity() {
 

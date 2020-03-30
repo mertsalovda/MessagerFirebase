@@ -17,4 +17,9 @@
         <item name="colorControlActivated">@color/white</item>
     </style>
 
+    <style name="CardViewStyle" parent="CardView.Light">
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="contentPadding">8dp</item>
+    </style>
 </resources>

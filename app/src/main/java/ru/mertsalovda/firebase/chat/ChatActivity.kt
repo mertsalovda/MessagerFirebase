@@ -1,4 +1,4 @@
-package ru.mertsalovda.firebase
+package ru.mertsalovda.firebase.chat
 
 import android.app.Activity
 import android.content.Intent
@@ -11,13 +11,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.ac_chat.*
+import ru.mertsalovda.firebase.ProfileActivity
+import ru.mertsalovda.firebase.R
+import ru.mertsalovda.firebase.model.Message
 
 class ChatActivity : AppCompatActivity() {
 
     private val storage = FirebaseFirestore.getInstance()
+    private var adapter: ChatAdapter
+
+    init {
+        adapter = ChatAdapter()
+    }
 
     companion object {
         fun start(context: AppCompatActivity) {
@@ -25,18 +34,49 @@ class ChatActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             context.startActivity(intent)
         }
+
+        private const val COLLECTION = "messages"
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        storage.collection(COLLECTION).addSnapshotListener(this) { snapshot, e ->
+            if (e != null) {
+                log("ERROR ${e.message}")
+                return@addSnapshotListener
+            }
+            val documents = snapshot?.documents
+            if (documents != null) {
+                val list = mutableListOf<Message>()
+                for (doc in documents) {
+                    val message = doc?.toObject(Message::class.java)
+                    log("DATA $message")
+                    if (message != null) {
+                        list.add(message)
+                    }
+                }
+                list.sortBy { it.date }
+                adapter.addData(list, true)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_chat)
 
+        val layoutManager = LinearLayoutManager(this)
+        recycler.layoutManager = layoutManager
+        recycler.adapter = adapter
+
+
         btnSend.setOnClickListener {
             val message = etMessage.text.toString().trim()
             if (isValidText(message)) {
                 sendMessage(message)
             } else {
-                toast(getString(R.string.empty_message))
+                etMessage.error = getString(R.string.empty_message)
             }
 
             etMessage.text = null
@@ -46,9 +86,15 @@ class ChatActivity : AppCompatActivity() {
 
     private fun sendMessage(message: String) {
         val user = FirebaseAuth.getInstance().currentUser
+        val mess = Message(
+            user?.displayName.toString(),
+            message,
+            System.currentTimeMillis(),
+            user?.photoUrl.toString()
+        )
         val map = mapOf(user?.displayName to message)
-        storage.collection("messages")
-            .add(map)
+        storage.collection(COLLECTION)
+            .add(mess)
             .addOnSuccessListener {
                 log("Сообщение отправлено!")
             }
@@ -83,11 +129,13 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun hideKeyboard() {
-        val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as (InputMethodManager)
-        var view = this.currentFocus
-        if (view == null) {
-            view = View(this)
+        this.also {
+            val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as (InputMethodManager)
+            var view = currentFocus
+            if (view == null) {
+                view = View(it)
+            }
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
