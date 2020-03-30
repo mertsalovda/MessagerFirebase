@@ -22,11 +22,7 @@ import ru.mertsalovda.firebase.model.Message
 class ChatActivity : AppCompatActivity() {
 
     private val storage = FirebaseFirestore.getInstance()
-    private var adapter: ChatAdapter
-
-    init {
-        adapter = ChatAdapter()
-    }
+    private var adapter: ChatAdapter = ChatAdapter()
 
     companion object {
         fun start(context: AppCompatActivity) {
