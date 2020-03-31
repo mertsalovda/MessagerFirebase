@@ -54,6 +54,7 @@ class ChatActivity : AppCompatActivity() {
                 }
                 list.sortBy { it.date }
                 adapter.addData(list, true)
+                recycler.scrollToPosition((recycler.adapter as ChatAdapter).itemCount-1)
             }
         }
     }
@@ -77,6 +78,7 @@ class ChatActivity : AppCompatActivity() {
 
             etMessage.text = null
             hideKeyboard()
+            recycler.scrollToPosition((recycler.adapter as ChatAdapter).itemCount-1)
         }
     }
 
@@ -86,9 +88,9 @@ class ChatActivity : AppCompatActivity() {
             user?.displayName.toString(),
             message,
             System.currentTimeMillis(),
-            user?.photoUrl.toString()
+            user?.photoUrl.toString(),
+            user?.uid
         )
-        val map = mapOf(user?.displayName to message)
         storage.collection(COLLECTION)
             .add(mess)
             .addOnSuccessListener {
